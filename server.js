@@ -5,31 +5,24 @@ const app = express();
 
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
-app.post('/api/dip-choco', async (req, res) => {
+app.post('/api/action/:name', async (req, res) => {
 
-    try {
+    const action = req.params.name;
 
-        const response = await sendCommand('DIP_CHOCO');
+    console.log("Action:", action);
 
-        res.json({
-            success: true,
-            robot: response
-        });
+    await sendCommand(action);
 
-    } catch(err) {
-
-        console.error(err);
-
-        res.status(500).json({
-            success: false,
-            error: err.message
-        });
-    }
+    res.json({ success: true });
 });
 
 
 app.listen(3000, () => {
     console.log('Serveur démarré sur http://localhost:3000');
+});
+
+app.get('/test', (req, res) => {
+    res.send("OK SERVER");
 });

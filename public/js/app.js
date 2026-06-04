@@ -3,7 +3,7 @@ async function DipChoco(){
     document.getElementById("status").innerText =
         "Commande envoyée...";
 
-    await fetch(`/api/dip-choco`,{
+    await fetch(`/api/action/dip-choco`,{
         method:"POST"
     });
 
@@ -16,7 +16,7 @@ async function Demo(){
     document.getElementById("status").innerText =
         "Commande envoyée...";
 
-    await fetch(`/api/demo`,{
+    await fetch(`/api/action/demo`,{
         method:"POST"
     });
 
@@ -29,7 +29,7 @@ async function TransportPosition(){
     document.getElementById("status").innerText =
         "Commande envoyée...";
 
-    await fetch(`/api/transport-position`,{
+    await fetch(`/api/action/transport-position`,{
         method:"POST"
     });
 
