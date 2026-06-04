@@ -1,121 +1,144 @@
-# All About Automation
+# 🤖⚙️ All About Automation
 
-Application web permettant de piloter des démonstrations sur un robot FANUC CRX depuis une interface tactile simple et intuitive.
+Application web permettant de piloter des démonstrations sur un robot **FANUC CRX** depuis une interface tactile simple, rapide et intuitive.
 
-## Fonctionnalités
+---
 
-* Affichage du logo de l'entreprise
-* Interface plein écran adaptée aux salons professionnels
-* 3 boutons de démonstration personnalisables
-* Backend Node.js avec API REST
-* Communication TCP/IP avec le contrôleur FANUC
-* Architecture simple et extensible
+## ✨ Fonctionnalités
 
-## Architecture
+- 🖼️ Affichage du logo de l'entreprise  
+- 🖥️ Interface plein écran adaptée aux salons professionnels  
+- 🔘 3 boutons de démonstration personnalisables  
+- ⚡ Backend Node.js avec API REST  
+- 🔌 Communication TCP/IP avec contrôleur FANUC CRX  
+- 🧩 Architecture simple, modulaire et extensible  
+
+---
+
+## 🏗️ Architecture
 
 ```text
-┌─────────────────┐
-│ Interface Web   │
-│ HTML / CSS / JS │
-└────────┬────────┘
-         │ HTTP
-         ▼
-┌─────────────────┐
-│ Node.js Express │
-└────────┬────────┘
-         │ TCP Socket
-         ▼
-┌─────────────────┐
-│ FANUC CRX-3iA   │
-└─────────────────┘
+┌──────────────────────────┐
+│   🖥️ Interface Web       │
+│   HTML / CSS / JS        │
+└────────────┬─────────────┘
+             │ HTTP (fetch)
+             ▼
+┌──────────────────────────┐
+│ ⚙️ Node.js Express API   │
+└────────────┬─────────────┘
+             │ TCP Socket
+             ▼
+┌──────────────────────────┐
+│ 🤖 FANUC CRX-3iA         │
+└──────────────────────────┘
 ```
 
-## Structure du projet
+---
 
-```text
+## 📁 Structure du projet
+
+```
 .
 ├── server.js
 ├── robot.js
 ├── package.json
-├── public
+│
+├── public/
 │   ├── index.html
-│   ├── css
+│   ├── css/
 │   │   └── style.css
-│   ├── js
+│   ├── js/
 │   │   └── app.js
-│   └── img
+│   └── img/
 │       └── logo.png
+│
 └── README.md
 ```
 
-## Prérequis
+---
 
-* Node.js 20+
-* npm
-* Contrôleur FANUC connecté au réseau local
-* Option TCP/IP configurée côté robot
+## ⚙️ Prérequis
 
-## Installation
+- 🟢 Node.js 20+
+- 📦 npm
+- 🌐 Réseau local opérationnel
+- 🤖 Robot FANUC CRX connecté
+- 🔧 Option TCP/IP activée côté robot
 
-Cloner le dépôt :
+---
+
+## 🚀 Installation
+
+### 📥 Cloner le projet
 
 ```bash
 git clone <repository-url>
 cd fanuc-crx-salon-demo
 ```
 
-Installer les dépendances :
+### 📦 Installer les dépendances
 
 ```bash
 npm install
 ```
 
-## Lancement
+---
 
-Mode normal :
+## ▶️ Lancement
+
+### 🟢 Mode production
 
 ```bash
 npm start
 ```
 
-Mode développement :
+### 🔧 Mode développement
 
 ```bash
 npm run dev
 ```
 
-L'application sera disponible à l'adresse :
+---
 
-```text
+## 🌍 Accès à l'application
+
+```
 http://localhost:3000
 ```
 
-## Configuration du robot
+---
 
-Modifier les paramètres réseau dans `robot.js` :
+## 🤖 Configuration du robot
+
+Modifier les paramètres dans `robot.js` :
 
 ```javascript
 const ROBOT_IP = '192.168.1.100';
 const ROBOT_PORT = 9000;
 ```
 
-Adapter ces valeurs à la configuration du contrôleur FANUC.
+---
 
-## API
+## 🔌 API
 
-### Lancer une action
+### 🚀 Lancer une action
 
-```http
+```
 POST /api/action/:name
 ```
 
-Exemple :
+---
 
-```http
+### 📌 Exemple
+
+```
 POST /api/action/DIP_CHOCO
 ```
 
-Réponse :
+---
+
+### 📤 Réponse
 
 ```json
 {
@@ -124,7 +147,9 @@ Réponse :
 }
 ```
 
-## Exemple Frontend
+---
+
+## 💻 Exemple Frontend
 
 ```javascript
 await fetch('/api/action/DIP_CHOCO', {
@@ -132,77 +157,74 @@ await fetch('/api/action/DIP_CHOCO', {
 });
 ```
 
-## Communication TCP
+---
 
-Le backend envoie une commande texte au robot :
+## 📡 Communication TCP
 
-```text
+```
 DIP_CHOCO
 ```
 
-Le robot répond :
+Robot réponse :
 
-```text
+```
 OK
 ```
 
-Cette logique peut être adaptée pour :
+---
 
-* Écriture de registres
-* Déclenchement de programmes TP
-* Gestion des états du robot
-* Retour d'informations vers l'interface
+## 🧠 Cas d’usage possibles
 
-## Personnalisation
+- 📊 Écriture de registres FANUC  
+- ▶️ Déclenchement de programmes TP  
+- 🔄 Gestion des états robot  
+- 📡 Retour d’informations vers UI  
+- 🎯 Automatisation de démos salon  
 
-### Changer le logo
+---
 
-Remplacer :
+## 🎨 Personnalisation
 
-```text
+### 🖼️ Changer le logo
+
+```
 public/img/logo.png
 ```
 
-### Modifier les boutons
+### 🔘 Modifier les boutons
 
-Modifier :
-
-```text
-public/index.html
 ```
-
-et
-
-```text
+public/index.html
 public/js/app.js
 ```
 
-### Modifier le style
+### 🎨 Modifier le style
 
-Modifier :
-
-```text
+```
 public/css/style.css
 ```
 
-## Sécurité
+---
 
-Cette application est prévue pour un réseau local de démonstration.
+## 🔐 Sécurité
 
-Pour un déploiement industriel, il est recommandé d'ajouter :
+Application de démonstration locale.
 
-* Authentification
-* Journalisation des commandes
-* Gestion des erreurs avancée
-* Validation des commandes
-* Chiffrement des communications
+- 🔐 Authentification recommandée en prod
+- 📜 Logs des commandes
+- ⚠️ Validation des inputs
+- 🔒 Chiffrement possible (TLS)
 
-## Licence
+---
 
-Ce projet est fourni à titre d'exemple.
+## 📄 Licence
 
-Dépendances principales :
+Projet éducatif et démonstration.
 
-* Node.js (MIT)
-* Express (MIT)
-* cors (MIT)
+---
+
+## 🧩 Dépendances
+
+- Node.js (MIT)
+- Express (MIT)
+- cors (MIT)
