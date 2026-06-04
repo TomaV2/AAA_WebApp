@@ -1,0 +1,33 @@
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
+}
+
+.container{
+    text-align:center;
+    margin-top:50px;
+}
+
+.logo{
+    width:1000px;
+    margin-bottom:30px;
+}
+
+button{
+    display:block;
+    width:400px;
+    height:90px;
+    margin:20px auto;
+    font-size:28px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    background:#EA3A5E;
+    color:#fff ;
+}
+
+#status{
+    margin-top:40px;
+    font-size:24px;
+}

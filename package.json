@@ -1,0 +1,19 @@
+{
+  "name": "crx-salon-demo",
+  "version": "1.0.0",
+  "description": "Interface salon pour robot FANUC CRX-3iA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "author": "VILLENEUVE Thomas",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "expres": "^0.0.5",
+    "express": "^5.1.0"
+  },
+  "keywords": [],
+  "type": "commonjs"
+}
