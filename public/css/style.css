@@ -30,6 +30,7 @@ button{
 #status{
     margin-top:40px;
     font-size:24px;
+    color:#f5f5f5; /* disabled */
 }
 
 #language {
