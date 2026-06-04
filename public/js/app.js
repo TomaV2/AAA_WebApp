@@ -36,3 +36,34 @@ async function TransportPosition(){
     document.getElementById("status").innerText =
         `Position de transport lancée`;
 }
+
+function setLanguage(lang) {
+
+    document.getElementById('title').textContent =
+        translations[lang].title;
+
+    document.getElementById('btnDipChoco').textContent =
+        translations[lang].dipChoco;
+
+    document.getElementById('btnTransportPosition').textContent =
+        translations[lang].transportPosition;
+
+    document.getElementById('btnDemo').textContent =
+        translations[lang].demo;
+
+    document.getElementById('status').textContent =
+        translations[lang].status;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const languageEl = document.getElementById('language');
+
+    if (languageEl) {
+        languageEl.addEventListener('change', (event) => {
+            setLanguage(event.target.value);
+        });
+    }
+
+    setLanguage('en');
+});

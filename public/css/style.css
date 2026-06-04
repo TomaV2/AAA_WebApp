@@ -18,7 +18,7 @@ button{
     display:block;
     width:400px;
     height:90px;
-    margin:20px auto;
+    margin:30px auto;
     font-size:28px;
     border:none;
     border-radius:12px;
@@ -30,4 +30,32 @@ button{
 #status{
     margin-top:40px;
     font-size:24px;
+}
+
+#language {
+    width: 120px;
+    height: 60px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    padding: 10px 15px;
+
+    border: none;
+    border-radius: 12px;
+
+    background-color: #EA3A5E;
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+    outline: none;
+
+    appearance: none; /* enlève style natif */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    text-align: center;
 }

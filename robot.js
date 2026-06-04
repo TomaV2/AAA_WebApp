@@ -1,6 +1,6 @@
 const net = require('net');
 
-const ROBOT_IP = '192.168.1.100';
+const ROBOT_IP = 'localhost';
 const ROBOT_PORT = 9000;
 
 function sendCommand(command) {
