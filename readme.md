@@ -10,29 +10,25 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 - 🖥️ Interface plein écran adaptée aux salons professionnels  
 - 🔘 3 boutons de démonstration personnalisables  
 - ⚡ Backend Node.js avec API REST  
-- 🔌 Communication TCP/IP avec contrôleur FANUC CRX  
+- 🔌 Communication contact secs avec contrôleur FANUC CRX  
 - 🧩 Architecture simple, modulaire et extensible  
 
 ---
 
-## 🏗️ Architecture
-
-```text
-┌──────────────────────────┐
-│   🖥️ Interface Web       │
-│   HTML / CSS / JS        │
-└────────────┬─────────────┘
-             │ HTTP (fetch)
-             ▼
-┌──────────────────────────┐
-│ ⚙️ Node.js Express API   │
-└────────────┬─────────────┘
-             │ TCP Socket
-             ▼
-┌──────────────────────────┐
-│ 🤖 FANUC CRX-3iA         │
-└──────────────────────────┘
-```
+🏗️ Architecture
+🌐 Application Web
+        ↓ HTTP
+🍓 Raspberry Pi
+🟢 Serveur Node.js
+        ↓ GPIO
+🔌 Module relais
+        ↓ Contacts secs
+🤖 Robot FANUC
+📥 Entrées numériques (DI)
+        ↓
+📄 Programme TP
+        ↓
+⚙️ Exécution des actions robot
 
 ---
 
@@ -64,7 +60,6 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 - 📦 npm
 - 🌐 Réseau local opérationnel
 - 🤖 Robot FANUC CRX connecté
-- 🔧 Option TCP/IP activée côté robot
 
 ---
 
