@@ -1,3 +1,6 @@
+const counter = require('./counter');
+
+
 async function DipChoco(){
 
     document.getElementById("status").innerText =
@@ -6,6 +9,7 @@ async function DipChoco(){
     await fetch(`/api/action/dip-choco`,{
         method:"POST"
     });
+    counter.increment();
 
     document.getElementById("status").innerText =
         `DipChoco lancée`;

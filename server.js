@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const { sendCommand } = require('./robot');
 const app = express();
 
 const Gpio = require('pigpio').Gpio;
@@ -31,7 +30,7 @@ app.post('/api/action/:name', async (req, res) => {
             relayTrsPos.digitalWrite(1);
             setTimeout(() => relayTrsPos.digitalWrite(0), 1000);
             break;  
-
+    }
     res.json({ success: true });
 });
 
