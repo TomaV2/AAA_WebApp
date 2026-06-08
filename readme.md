@@ -16,6 +16,8 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 ---
 
 🏗️ Architecture
+
+```
 🌐 Application Web
         ↓ HTTP
 🍓 Raspberry Pi
@@ -29,7 +31,7 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 📄 Programme TP
         ↓
 ⚙️ Exécution des actions robot
-
+```
 ---
 
 ## 📁 Structure du projet
