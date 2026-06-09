@@ -3,10 +3,11 @@ const path = require('path');
 const app = express();
 const counter = require('./public/js/counter');
 
-const Gpio = require('pigpio').Gpio;
-const relayDip = new Gpio(17, { mode: Gpio.OUTPUT });
-const relayDemo = new Gpio(27, { mode: Gpio.OUTPUT });
-const relayTrsPos = new Gpio(22, { mode: Gpio.OUTPUT });
+const gpio = require('./public/js/GPIO');
+const dipChocoPin = '17';
+const demoPin = '27';
+const transportPositionPin = '22';
+const handshakeVisitorPin = '10';
 
 app.use(express.json());
 
@@ -26,17 +27,21 @@ app.post('/api/action/:name', async (req, res) => {
 
     switch (action) {
         case 'dip-choco':
-            relayDip.digitalWrite(1);
-            setTimeout(() => relayDip.digitalWrite(0), 1000);
+            gpio.setGPIO(dipChocoPin, 1);
+            setTimeout(() => gpio.setGPIO(dipChocoPin, 0), 1000);
             break;
         case 'demo':
-            relayDemo.digitalWrite(1);
-            setTimeout(() => relayDemo.digitalWrite(0), 1000);
+            gpio.setGPIO(demoPin, 1);
+            setTimeout(() => gpio.setGPIO(demoPin, 0), 1000);
             break;
         case 'transport-position':
-            relayTrsPos.digitalWrite(1);
-            setTimeout(() => relayTrsPos.digitalWrite(0), 1000);
-            break;  
+            gpio.setGPIO(transportPositionPin, 1);
+            setTimeout(() => gpio.setGPIO(transportPositionPin, 0), 1000);
+            break;
+        case 'handshake-visitor':
+            gpio.setGPIO(handshakeVisitorPin, 1);
+            setTimeout(() => gpio.setGPIO(handshakeVisitorPin, 0), 1000);
+            break;
     }
     res.json({ success: true });
 });
