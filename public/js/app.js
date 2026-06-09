@@ -1,3 +1,13 @@
+function sendAction(name) {
+    fetch(`/api/action/${name}`, {
+        method: 'POST'
+    })
+    .then(r => r.json())
+    .then(data => console.log(data))
+    .catch(err => console.error(err));
+}
+
+
 async function DipChoco(){
 
     document.getElementById("status").innerText =
