@@ -1,5 +1,10 @@
-const counter = require('./counter');
+async function incCounter() {
 
+    const response = await fetch('/increment', {
+        method: 'POST'
+    });
+    const data = await response.json();
+}
 
 async function DipChoco(){
 
@@ -9,10 +14,17 @@ async function DipChoco(){
     await fetch(`/api/action/dip-choco`,{
         method:"POST"
     });
-    counter.increment();
+    await incCounter();
 
     document.getElementById("status").innerText =
         `DipChoco lancée`;
+}
+
+async function HandshakeVisitor(){
+    
+    await fetch(`/api/action/handshake-visitor`,{
+        method:"POST"
+    }); 
 }
 
 async function Demo(){
@@ -48,6 +60,9 @@ function setLanguage(lang) {
 
     document.getElementById('btnDipChoco').textContent =
         translations[lang].dipChoco;
+
+    document.getElementById('btnHandshakeVisitor').textContent =
+        translations[lang].handshakeVisitor;
 
     document.getElementById('btnTransportPosition').textContent =
         translations[lang].transportPosition;

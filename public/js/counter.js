@@ -24,11 +24,16 @@ function setCount(value) {
 
 // Incrémenter le compteur
 function increment() {
-    const value = getCount() + 1;
+     const data = JSON.parse(fs.readFileSync(FILE));
 
-    setCount(value);
+    data.count++;
 
-    return value;
+    fs.writeFileSync(
+        FILE,
+        JSON.stringify(data, null, 2)
+    );
+
+    return data.count;
 }
 
 module.exports = {
