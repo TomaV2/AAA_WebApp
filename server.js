@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const counter = require('./public/js/counter');
 
 const gpio = require('./public/js/GPIO');
 const dipChocoPin = '17';
@@ -13,11 +12,6 @@ app.use(express.json());
 
 app.use(express.static('public'));
 
-app.post('/increment', (req, res) => {
-    res.json({
-        count: counter.increment()
-    });
-});
 
 app.post('/api/action/:name', async (req, res) => {
 

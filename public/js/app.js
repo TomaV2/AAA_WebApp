@@ -1,11 +1,3 @@
-async function incCounter() {
-
-    const response = await fetch('/increment', {
-        method: 'POST'
-    });
-    const data = await response.json();
-}
-
 async function DipChoco(){
 
     document.getElementById("status").innerText =
@@ -14,7 +6,6 @@ async function DipChoco(){
     await fetch(`/api/action/dip-choco`,{
         method:"POST"
     });
-    await incCounter();
 
     document.getElementById("status").innerText =
         `DipChoco lancée`;
