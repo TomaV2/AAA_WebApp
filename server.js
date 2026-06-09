@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
 function setGPIO(pin, value)  {
     exec(
-        `gpioset -c gpiochip0 ${pin}=${value}`,
+        'gpioset -c gpiochip0 -t 1s,0 ${pin}=1',
         (error, stdout, stderr) => {
             if (error) {
                 console.error(error);
@@ -30,7 +30,7 @@ function setGPIO(pin, value)  {
 
 function pulseGPIO(pin, durationMs = 500) {
     exec(
-        'gpioset -c gpiochip0 -t 1s,0 ${pin}=1'
+        'gpioset -c gpiochip0 -t 1s,0 ${pin}=1',
         // `gpioset -c gpiochip0 -p ${durationMs}ms ${pin}=1`,
         (error) => {
             if (error) {
@@ -49,9 +49,8 @@ app.post('/api/action/:name', async (req, res) => {
 
     switch (action) {
         case 'dip-choco':
-            pulseGPIO(dipChocoPin, 1000);
-            // setGPIO(dipChocoPin, 1);
-            // setTimeout(() => setGPIO(dipChocoPin, 0), 1000);
+            setGPIO(dipChocoPin, 1);
+            setTimeout(() => setGPIO(dipChocoPin, 0), 1000);
             break;
         case 'demo':
             setGPIO(demoPin, 1);
