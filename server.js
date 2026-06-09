@@ -49,19 +49,15 @@ app.post('/api/action/:name', async (req, res) => {
     switch (action) {
         case 'dip-choco':
             setGPIO(dipChocoPin, 1);
-            setTimeout(() => setGPIO(dipChocoPin, 0), 1000);
             break;
         case 'demo':
             setGPIO(demoPin, 1);
-            setTimeout(() => setGPIO(demoPin, 0), 1000);
             break;
         case 'transport-position':
             setGPIO(transportPositionPin, 1);
-            setTimeout(() => setGPIO(transportPositionPin, 0), 1000);
             break;
         case 'handshake-visitor':
             setGPIO(handshakeVisitorPin, 1);
-            setTimeout(() => setGPIO(handshakeVisitorPin, 0), 1000);
             break;
     }
     res.json({ success: true });
