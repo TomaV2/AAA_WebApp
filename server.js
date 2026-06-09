@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 
 function setGPIO(pin, value)  {
     exec(
-        `gpioset -c gpiochip0 -z ${pin}=${value}`,
+        `gpioset -c gpiochip0 ${pin}=${value}`,
         (error, stdout, stderr) => {
             if (error) {
                 console.error(error);
