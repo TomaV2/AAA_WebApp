@@ -39,7 +39,6 @@ function pulseGPIO(pin, durationMs = 500) {
     );
 }
 
-
 app.post('/api/action/:name', async (req, res) => {
 
     const action = req.params.name;
@@ -48,16 +47,16 @@ app.post('/api/action/:name', async (req, res) => {
 
     switch (action) {
         case 'dip-choco':
-            setGPIO(dipChocoPin, 1);
+            setGPIO(dipChocoPin, 0);
             break;
         case 'demo':
-            setGPIO(demoPin, 1);
+            setGPIO(demoPin, 0);
             break;
         case 'transport-position':
-            setGPIO(transportPositionPin, 1);
+            setGPIO(transportPositionPin, 0);
             break;
         case 'handshake-visitor':
-            setGPIO(handshakeVisitorPin, 1);
+            setGPIO(handshakeVisitorPin, 0);
             break;
     }
     res.json({ success: true });
