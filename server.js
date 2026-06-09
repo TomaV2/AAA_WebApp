@@ -10,7 +10,7 @@ const handshakeVisitorPin = '10';
 
 app.use(express.json());
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.post('/api/action/:name', async (req, res) => {
