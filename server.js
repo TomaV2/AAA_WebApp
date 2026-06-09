@@ -30,7 +30,8 @@ function setGPIO(pin, value)  {
 
 function pulseGPIO(pin, durationMs = 500) {
     exec(
-        `gpioset -c gpiochip0 -p ${durationMs}ms ${pin}=1`,
+        'gpioset -c gpiochip0 -t 1s,0 ${pin}=1'
+        // `gpioset -c gpiochip0 -p ${durationMs}ms ${pin}=1`,
         (error) => {
             if (error) {
                 console.error(error);
