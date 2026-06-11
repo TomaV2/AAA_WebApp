@@ -1,6 +1,9 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const { chromium } = require('playwright');
+const PrgRegister = 10;
+const fanucUrl = 'http://127.0.0.3/karel/ComGet?sFc=28';
 
 const { exec } = require('child_process');
 const dipChocoPin = '17';
@@ -47,21 +50,54 @@ app.post('/api/action/:name', async (req, res) => {
 
     switch (action) {
         case 'dip-choco':
-            setGPIO(dipChocoPin, 0);
+            setregister(PrgRegister, 1);
+            // setGPIO(dipChocoPin, 0);
             break;
         case 'demo':
-            setGPIO(demoPin, 0);
+            setregister(PrgRegister, 2);
+            // setGPIO(demoPin, 0);
             break;
         case 'transport-position':
-            setGPIO(transportPositionPin, 0);
+            setregister(PrgRegister, 3);
+            // setGPIO(transportPositionPin, 0);
             break;
         case 'handshake-visitor':
-            setGPIO(handshakeVisitorPin, 0);
+            setregister(PrgRegister, 4);
+            // setGPIO(handshakeVisitorPin, 0);
             break;
     }
     res.json({ success: true });
 });
 
+async function setRegister(regNumber, value) {
+
+    const browser = await chromium.launch({
+        headless: true
+    });
+
+    const page = await browser.newPage();
+
+    try {
+
+        await page.goto(fanucUrl);
+
+        await page.evaluate(({ regNumber, value }) => {
+
+            sendRegValue(
+                String(value),
+                `iVal${regNumber}`,
+                regNumber
+            );
+
+        }, { regNumber, value });
+
+        console.log(`R[${regNumber}] = ${value}`);
+
+    } finally {
+
+        await browser.close();
+    }
+}
 
 app.listen(3000, () => {
     console.log('Serveur démarré sur http://localhost:3000');

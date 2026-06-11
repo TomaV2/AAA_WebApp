@@ -1,12 +1,9 @@
-function sendAction(name) {
-    fetch(`/api/action/${name}`, {
-        method: 'POST'
-    })
-    .then(r => r.json())
-    .then(data => console.log(data))
-    .catch(err => console.error(err));
+function incrementIndexCounter() {
+    const counterEl = document.getElementById('indexCounter');
+    let count = parseInt(counterEl.textContent) || 0;
+    count++;
+    counterEl.textContent = count;
 }
-
 
 async function DipChoco(){
 
@@ -16,6 +13,7 @@ async function DipChoco(){
     await fetch(`/api/action/dip-choco`,{
         method:"POST"
     });
+    incrementIndexCounter();
 
     document.getElementById("status").innerText =
         `DipChoco lancée`;
