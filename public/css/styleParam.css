@@ -1,0 +1,11 @@
+.parameter {
+    margin: 15px 0;
+}
+
+input[type="text"] {
+    width: 250px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

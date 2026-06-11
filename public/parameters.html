@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="/css/style.css">
+        <title>Parameters</title>
+    </head>
+    <body>
+
+    <h1>Parameters</h1>
+    <div class="parameter">
+        <input type="checkbox" id="BiscuitInDispenser">
+        <label for="BiscuitInDispenser">Biscuit In Dispenser</label>
+    </div>
+
+    <div class="parameter">
+        <input type="checkbox" id="BiscuitInHolder">
+        <label for="BiscuitInHolder">Biscuit In Holder</label>
+    </div>
+
+    <div class="parameter">
+        <label for="trayIndex">Tray Index:</label>
+        <input type="number" id="trayIndex" min="0" max="100">
+    </div>
+
+    <div class="parameter">
+        <input type="checkbox" id="debugMode">
+        <label for="debugMode">Mode debug</label>
+    </div>
+
+    <button id="saveParamBtn">
+        Save Parameters
+    </button>
+
+    <a href="/">Home</a>
+
+    <script src="js/parameters.js"></script>
+
+    </body>
+</html>
