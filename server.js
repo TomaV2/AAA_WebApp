@@ -1,9 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const { chromium } = require('playwright');
-const PrgRegister = 10;
-const fanucUrl = 'http://127.0.0.3/karel/ComGet?sFc=28';
+const fanucReg = require('./fanucRegister');
 
 const { exec } = require('child_process');
 const dipChocoPin = '17';
@@ -42,6 +40,24 @@ function pulseGPIO(pin, durationMs = 500) {
     );
 }
 
+const { chromium } = require('playwright');
+const PrgRegister = 10;
+const fanucUrl = 'http://127.0.0.3/karel/ComGet?sFc=28';
+
+
+async function setRegisterPrg(value) {
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+
+    await page.goto(fanucUrl);
+
+    await page.locator('input[name="iVal10"]').fill(String(value));
+    await page.locator('input[name="iVal10"]').press('Tab');
+
+    await browser.close();
+}
+
+
 app.post('/api/action/:name', async (req, res) => {
 
     const action = req.params.name;
@@ -50,54 +66,26 @@ app.post('/api/action/:name', async (req, res) => {
 
     switch (action) {
         case 'dip-choco':
-            setregister(PrgRegister, 1);
+            setRegisterPrg(1);
             // setGPIO(dipChocoPin, 0);
             break;
         case 'demo':
-            setregister(PrgRegister, 2);
+            setRegisterPrg(2);
             // setGPIO(demoPin, 0);
             break;
         case 'transport-position':
-            setregister(PrgRegister, 3);
+           setRegisterPrg(3);
             // setGPIO(transportPositionPin, 0);
             break;
         case 'handshake-visitor':
-            setregister(PrgRegister, 4);
+            setRegisterPrg(4);
             // setGPIO(handshakeVisitorPin, 0);
             break;
     }
     res.json({ success: true });
 });
 
-async function setRegister(regNumber, value) {
 
-    const browser = await chromium.launch({
-        headless: true
-    });
-
-    const page = await browser.newPage();
-
-    try {
-
-        await page.goto(fanucUrl);
-
-        await page.evaluate(({ regNumber, value }) => {
-
-            sendRegValue(
-                String(value),
-                `iVal${regNumber}`,
-                regNumber
-            );
-
-        }, { regNumber, value });
-
-        console.log(`R[${regNumber}] = ${value}`);
-
-    } finally {
-
-        await browser.close();
-    }
-}
 
 app.listen(3000, () => {
     console.log('Serveur démarré sur http://localhost:3000');
