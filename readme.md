@@ -1,6 +1,6 @@
 # 🤖⚙️ All About Automation
 
-Application web permettant de piloter des démonstrations sur un robot **FANUC CRX** depuis une interface tactile simple, rapide et intuitive.
+Application web permettant de piloter des démonstrations sur un robot **ABB GoFa** depuis une interface tactile simple, rapide et intuitive.
 
 ---
 
@@ -10,7 +10,7 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 - 🖥️ Interface plein écran adaptée aux salons professionnels  
 - 🔘 3 boutons de démonstration personnalisables  
 - ⚡ Backend Node.js avec API REST  
-- 🔌 Communication TCP/IP avec contrôleur FANUC CRX  
+- 🔌 Communication via le OmniCore SDK
 - 🧩 Architecture simple, modulaire et extensible  
 
 ---
@@ -27,10 +27,10 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 ┌──────────────────────────┐
 │ ⚙️ Node.js Express API   │
 └────────────┬─────────────┘
-             │ TCP Socket
+             │ ADK
              ▼
 ┌──────────────────────────┐
-│ 🤖 FANUC CRX-3iA         │
+│ 🤖 ABB GoFa              │
 └──────────────────────────┘
 ```
 
@@ -63,8 +63,8 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 - 🟢 Node.js 20+
 - 📦 npm
 - 🌐 Réseau local opérationnel
-- 🤖 Robot FANUC CRX connecté
-- 🔧 Option TCP/IP activée côté robot
+- 🤖 Robot ABB GoFa connecté
+- 🔧 Option PC control
 
 ---
 
@@ -74,7 +74,7 @@ Application web permettant de piloter des démonstrations sur un robot **FANUC C
 
 ```bash
 git clone <repository-url>
-cd fanuc-crx-salon-demo
+cd AAA_WebApp
 ```
 
 ### 📦 Installer les dépendances
