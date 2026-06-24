@@ -1,6 +1,6 @@
 {
-  "name": "crx-salon-demo",
-  "version": "1.0.0",
+  "name": "AllAboutAutomation",
+  "version": "1.1.0",
   "description": "Interface salon pour robot FANUC CRX-3iA",
   "main": "server.js",
   "scripts": {

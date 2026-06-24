@@ -20,7 +20,7 @@ app.post('/api/action/:name', async (req, res) => {
 
 
 app.listen(3000, () => {
-    console.log('Serveur démarré sur http://localhost:3000');
+    console.log('Server start at http://localhost:3000');
 });
 
 app.get('/test', (req, res) => {

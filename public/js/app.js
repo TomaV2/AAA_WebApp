@@ -1,11 +1,15 @@
+async function SetRobotParameter(paramName, paramValue){
+    
+    await RWS.Rapid.setDataValue('T_ROB1','Wizard',paramName,paramValue);
+
+}
+
 async function DipChoco(){
 
     document.getElementById("status").innerText =
         "Commande envoyée...";
 
-    await fetch(`/api/action/dip-choco`,{
-        method:"POST"
-    });
+    await SetRobotParameter('CommandRequested','dip');
 
     document.getElementById("status").innerText =
         `DipChoco lancée`;
@@ -16,9 +20,7 @@ async function Demo(){
     document.getElementById("status").innerText =
         "Commande envoyée...";
 
-    await fetch(`/api/action/demo`,{
-        method:"POST"
-    });
+    await SetRobotParameter('CommandRequested','demo');
 
     document.getElementById("status").innerText =
         `Demo lancée`;
@@ -29,9 +31,7 @@ async function TransportPosition(){
     document.getElementById("status").innerText =
         "Commande envoyée...";
 
-    await fetch(`/api/action/transport-position`,{
-        method:"POST"
-    });
+    await SetRobotParameter('CommandRequested','transport');
 
     document.getElementById("status").innerText =
         `Position de transport lancée`;
