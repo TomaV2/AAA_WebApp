@@ -27,7 +27,7 @@ Application web permettant de piloter des démonstrations sur un robot **ABB GoF
 ┌──────────────────────────┐
 │ ⚙️ Node.js Express API   │
 └────────────┬─────────────┘
-             │ ADK
+             │ SDK
              ▼
 ┌──────────────────────────┐
 │ 🤖 ABB GoFa              │
