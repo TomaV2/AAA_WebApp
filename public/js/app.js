@@ -51,8 +51,6 @@ function setLanguage(lang) {
     document.getElementById('btnDemo').textContent =
         translations[lang].demo;
 
-    document.getElementById('status').textContent =
-        translations[lang].status;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -67,3 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setLanguage('en');
 });
+
+async function GoToParams() {
+
+    window.location.href = "params.html";   
+}
