@@ -5,12 +5,14 @@ async function SetGoHome() {
 }
 
 
-async function setMotorOn(){
+async function SetMotorOn(){
 
+    console.log('MotorOn')
     RWS.Controller.setMotorState('motor_on')
 }
 
-async function setMotorOff(){
+async function SetMotorOff(){
 
+    console.log('MotorOff')
     RWS.Controller.setMotorState('motor_off')
 }
