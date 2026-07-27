@@ -67,6 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function GoToParams() {
-
     window.location.href = "params.html";   
 }
+
+const aaaLogo = document.getElementById('AAA_Logo');
+aaaLogo.addEventListener('click', () => {
+    GoToParams();
+});
