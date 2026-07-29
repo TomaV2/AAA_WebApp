@@ -1,0 +1,80 @@
+#
+# Generated backup file, do not edit.
+#
+# Originally at: /user/TEMP/backup.060998
+# 2026-07-29  17:08:45
+#
+>>SYSTEM_ID:
+15000-101637
+
+>>PRODUCTS_ID:
+RobotOS Version: 18.1.0
+RobotControl Version: 7.21.0
+FlexPendantSoftwareUpdate Version: 1.22.0
+Robots Version: 1.21.0
+ZimmerSchmalz_Match Version: 3.0.5
+Wizard Version: 1.7.2
+ASI Version: 1.0.10
+
+  RobotControl Base
+  German
+  3020-1 PROFINET Controller
+  3020-2 PROFINET Device
+  3106-1 World Zones
+  3113-1 Path Recovery
+  3107-1 Collision Detection
+  3150-1 Collision Avoidance
+  3119-1 RobotStudio Connect
+  3154-1 IoT Data Gateway
+  3120-2 FlexPendant Essential App Package
+  3151-1 FlexPendant Program Package
+  3121-1 RW Add-In Prepared
+  3114-1 Multitasking
+  3043-3 SafeMove Collaborative
+  Safe Move Plug and Play
+  3044-2 Keyless Mode Switch, 2 modes
+  3018-1 Hot Swappable FlexPendant
+  Leadthrough
+  No Category 0
+  C30
+  C30 Type A
+  System without axis computer
+  Main computer M28.01
+  D7 (for CRB 15000)
+  Motor Commutation
+  Service Info System
+  FlexPendant App Package
+  CRB 15000-5/0.95
+  Basic Gripper
+  Wizard
+  ASI
+
+>>HOME:
+All public files and directories
+
+>>SYSPAR:
+SYS.cfg
+SIO.cfg
+PROC.cfg
+MMC.cfg
+MOC.cfg
+EIO.cfg
+
+
+
+>>TASK2: (T_ROB1,,)
+SYSMOD/GOFA_ASI_Procedures.sysx @ 
+SYSMOD/Gripper_Communication_UserData.sysx @ 
+PROGMOD/Wizard_LoadData.modx @ 
+PROGMOD/Data.modx @ 
+PROGMOD/Calib_t_Gripper.modx @ 
+SYSMOD/Gripper_Communication_Config.sysx @ 
+SYSMOD/IOGripper_ToolData.sysx @ 
+SYSMOD/Wizard_Params.sysx @ 
+SYSMOD/IOGripper_BASE.sysx @ 
+
+>>TASK3: (T_GOFA_LED,,)
+SYSMOD/GOFA_Main.sysx @ 
+
+
+>>EOF:

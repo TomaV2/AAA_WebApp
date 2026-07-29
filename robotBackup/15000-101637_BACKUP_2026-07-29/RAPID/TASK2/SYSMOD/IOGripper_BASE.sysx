@@ -1,0 +1,32 @@
+MODULE IOGripper_BASE(SYSMODULE)
+    
+    PROC openGripperProc(\switch nowait)
+          
+            SetDO ABB_Scalable_IO_0_DO1,0;
+            WaitDO ABB_Scalable_IO_0_DO1 , 0;
+            WaitTime 0.5;
+            SetDO ABB_Scalable_IO_0_DO2,1;
+            IF NOT Present(nowait)
+            WaitTime 1;
+    ENDPROC
+    
+    PROC openGripper()
+       openGripperProc;
+    ENDPROC
+    
+     
+    
+    PROC closeGripper()
+            SetDO ABB_Scalable_IO_0_DO1,0;
+            SetDO ABB_Scalable_IO_0_DO2,0;
+            WaitTime 0.5;
+            SetDO ABB_Scalable_IO_0_DO1,1;
+            WaitTime 1;
+    ENDPROC
+    
+    !PROC MyRoutine()
+     !   opengripper;
+      !  openGripper \nowait;
+        
+    !ENDPROC
+ENDMODULE

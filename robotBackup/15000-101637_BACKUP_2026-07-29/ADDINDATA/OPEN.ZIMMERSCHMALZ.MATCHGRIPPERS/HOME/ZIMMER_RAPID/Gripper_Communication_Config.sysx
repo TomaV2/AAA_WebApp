@@ -1,0 +1,304 @@
+MODULE Gripper_Communication_Config(SYSMODULE)
+    !***************************************************
+    !Programtype:  System Module
+    ! Description: This module is responsible for configuring the gripper signals.
+    !              It manages alias signals and controls the logic for opening and closing the gripper.
+    !
+    ! Copyright (c) ABB AB 2025
+    ! All rights reserved
+    !
+    !---------------------------------------------------
+    !Version      Date        Author     Description
+    !---------------------------------------------------
+    !R25B       2025_07_07    INNAPRA7	     New release
+    !***************************************************
+
+
+    !# -----------------------
+    !# ------ String data
+    !# -----------------------
+    PERS string sHeader:="Program Stopped";
+    PERS string sGripper1:="Gripper-1 feedback was unavailable";
+    PERS string sGripper2:="Gripper-2 feedback was unavailable";
+    PERS string sMsg1:="Check if Grip signal       :  ";
+    PERS string sMsg2:="Check if Release signal  :  ";
+
+    PERS string sdoGripper1Release:="";
+    PERS string sdoGripper1Grip:="";
+    PERS string sdiGripper1Release:="";
+    PERS string sdiGripper1Grip:="";
+
+    PERS string sdoGripper2Release:="";
+    PERS string sdoGripper2Grip:="";
+    PERS string sdiGripper2Release:="";
+    PERS string sdiGripper2Grip:="";
+
+    PERS string sNetworkDeviceName:="";
+
+
+    !# -----------------------
+    !# ------ Alias Signal
+    !# -----------------------
+    VAR signaldo AliasDo_Gripper1Release;
+    VAR signaldo AliasDo_Gripper1Grip;
+    VAR signaldo AliasDo_Gripper2Release;
+    VAR signaldo AliasDo_Gripper2Grip;
+
+    VAR signaldi AliasDi_Gripper1Release;
+    VAR signaldi AliasDi_Gripper1Grip;
+    VAR signaldi AliasDi_Gripper2Release;
+    VAR signaldi AliasDi_Gripper2Grip;
+
+    !# ----------------------------------
+    !# ------ Bool data
+    !#  Order : Output Led Indicator in Webapp
+    !#  Event :  Input Led Indicator in Webapp
+    !# ----------------------------------
+    PERS bool bGripper1Release_Order:=TRUE;
+    PERS bool bGripper1Grip_Order:=FALSE;
+    PERS bool bGripper2Release_Order:=TRUE;
+    PERS bool bGripper2Grip_Order:=FALSE;
+
+    PERS bool bGripper1Release_Event:=FALSE;
+    PERS bool bGripper1Grip_Event:=FALSE;
+    PERS bool bGripper2Release_Event:=TRUE;
+    PERS bool bGripper2Grip_Event:=FALSE;
+
+    PERS bool bIsFeedbackEnabled:=TRUE;
+
+    !# -----------------------
+    !# ------ Num data
+    !# -----------------------
+    VAR num nMaxTimeout:=2;
+	
+	PROC GRIPPER_ALIAS_IO_CONFIG()
+        VAR string Alias_Name;
+        !!!!! GRIPPER Output !!!!!!!
+
+        !Configure AliasIO to Release Gripper1
+        Alias_Name:=sdoGripper1Release;
+        AliasIO Alias_Name,AliasDo_Gripper1Release;
+
+        !Configure AliasIO to Grip Gripper1
+        Alias_Name:=sdoGripper1Grip;
+        AliasIO Alias_Name,AliasDo_Gripper1Grip;
+
+        !Configure AliasIO to Release Gripper2
+        Alias_Name:=sdoGripper2Release;
+        AliasIO Alias_Name,AliasDo_Gripper2Release;
+
+        !Configure AliasIO to Grip Gripper2
+        Alias_Name:=sdoGripper2Grip;
+        AliasIO Alias_Name,AliasDo_Gripper2Grip;
+
+
+
+        !!!!! GRIPPER Input !!!!!!!
+        IF bIsFeedbackEnabled=TRUE THEN
+
+            !Configure AliasIO to Release Gripper1
+            Alias_Name:=sdiGripper1Release;
+            AliasIO Alias_Name,AliasDi_Gripper1Release;
+
+            !Configure AliasIO to Grip Gripper1
+            Alias_Name:=sdiGripper1Grip;
+            AliasIO Alias_Name,AliasDi_Gripper1Grip;
+
+
+            !Configure AliasIO to Release Gripper2
+            Alias_Name:=sdiGripper2Release;
+            AliasIO Alias_Name,AliasDi_Gripper2Release;
+
+            !Configure AliasIO to Grip Gripper2
+            Alias_Name:=sdiGripper2Grip;
+            AliasIO Alias_Name,AliasDi_Gripper2Grip;
+        ENDIF
+
+    ENDPROC
+
+
+    !***************************************************************
+    ! Routine: GripperOneRelease
+    ! Description:
+    !   This procedure handles the release operation of Gripper 1.
+    !   It configures the alias I/O signals, sets the appropriate
+    !   digital outputs to release the gripper, and waits for the
+    !   corresponding input confirmations. Error handling is included
+    !   to manage timeout scenarios.
+    !***************************************************************
+
+    PROC GripperOneRelease()
+        ! Configure alias signals for the gripper
+        GRIPPER_ALIAS_IO_CONFIG;
+
+        ! Ensure the grip signal/bool is turned off
+        SetDO AliasDo_Gripper1Grip,0;
+        bGripper1Grip_Order:=FALSE;
+		WaitTime\InPos,0.2;
+        ! Activate the release signal/bool
+        SetDO AliasDo_Gripper1Release,1;
+        bGripper1Release_Order:=TRUE;
+
+        ! If feedback monitoring is enabled, verify signal
+        IF bIsFeedbackEnabled=TRUE THEN
+            ! Wait until the grip input signal confirms release (grip = 0)
+            WaitUntil\inpos,AliasDi_Gripper1Grip=0\MaxTime:=nMaxTimeout;
+            bGripper1Grip_Event:=FALSE;
+			
+            ! Wait until the release input signal confirms activation (release = 1)
+            WaitUntil\inpos,AliasDi_Gripper1Release=1\MaxTime:=nMaxTimeout;
+            bGripper1Release_Event:=TRUE;
+        ENDIF
+
+    ERROR
+        ! Handle timeout errors
+        IF ERRNO=ERR_WAIT_MAXTIME THEN
+            ErrWrite sGripper1,sHeader
+            \RL2:=" "
+            \RL3:=sMsg1+sdiGripper1Grip+" = 0"
+            \RL4:=sMsg2+sdiGripper1Release+" = 1";
+            Stop;
+        ENDIF
+
+    ENDPROC
+
+    !***************************************************************
+    ! Routine: GripperOneGrip
+    ! Description:
+    !   This procedure handles the gripping operation of Gripper 1.
+    !   It configures the alias I/O signals, sets the appropriate
+    !   digital outputs to activate the gripper, and waits for the
+    !   corresponding input confirmations. Error handling is included
+    !   to manage timeout scenarios.
+    !***************************************************************
+
+    PROC GripperOneGrip()
+        ! Configure alias signals for the gripper
+        GRIPPER_ALIAS_IO_CONFIG;
+
+        ! Ensure the release signal is turned off
+        SetDO AliasDo_Gripper1Release,0;
+        bGripper1Release_Order:=False;
+		WaitTime\InPos,0.2;
+        ! Activate the grip signal
+        SetDO AliasDo_Gripper1Grip,1;
+        bGripper1Grip_Order:=True;
+
+        ! If feedback monitoring is enabled, verify signal
+        IF bIsFeedbackEnabled=TRUE THEN
+            ! Wait until the release input signal confirms deactivation (release = 0)
+            WaitUntil\inpos,AliasDi_Gripper1Release=0\MaxTime:=nMaxTimeout;
+            bGripper1Release_Event:=FALSE;
+            ! Wait until the grip input signal confirms activation (grip = 1)
+            WaitUntil\inpos,AliasDi_Gripper1Grip=1\MaxTime:=nMaxTimeout;
+            bGripper1Grip_Event:=TRUE;
+        ENDIF
+
+
+    ERROR
+        ! Handle timeout errors
+        IF ERRNO=ERR_WAIT_MAXTIME THEN
+            ErrWrite sGripper1,sHeader
+            \RL2:=" "
+            \RL3:=sMsg1+sdiGripper1Grip+" = 1"
+            \RL4:=sMsg2+sdiGripper1Release+" = 0";
+            Stop;
+        ENDIF
+
+    ENDPROC
+
+
+    !***************************************************************
+    ! Routine: GripperTwoRelease
+    ! Description:
+    !   This procedure handles the release operation of Gripper 2.
+    !   It configures the alias I/O signals, sets the appropriate
+    !   digital outputs to release the gripper, and—if feedback is
+    !   enabled—waits for the corresponding input confirmations.
+    !   Error handling is included to manage timeout scenarios.
+    !***************************************************************
+
+    PROC GripperTwoRelease()
+
+        ! Configure alias signals for the gripper
+        GRIPPER_ALIAS_IO_CONFIG;
+
+        ! Ensure the grip signal is turned off
+        SetDO AliasDo_Gripper2Grip,0;
+        bGripper2Grip_Order:=FALSE;
+		WaitTime\InPos,0.2;
+        ! Activate the release signal
+        SetDO AliasDo_Gripper2Release,1;
+        bGripper2Release_Order:=TRUE;
+
+        ! If feedback monitoring is enabled, verify signal
+        IF bIsFeedbackEnabled=TRUE THEN
+            ! Wait until the grip input signal confirms release (grip = 0)
+            WaitUntil\inpos,AliasDi_Gripper2Grip=0\MaxTime:=nMaxTimeout;
+            bGripper2Grip_Event:=FALSE;
+            ! Wait until the release input signal confirms activation (release = 1)
+            WaitUntil\inpos,AliasDi_Gripper2Release=1\MaxTime:=nMaxTimeout;
+            bGripper2Release_Event:=TRUE;
+        ENDIF
+
+
+    ERROR
+        ! Handle timeout errors during signal confirmation
+        IF ERRNO=ERR_WAIT_MAXTIME THEN
+            ErrWrite sGripper2,sHeader
+            \RL2:=" "
+            \RL3:=sMsg1+sdiGripper2Grip+" = 0"
+            \RL4:=sMsg2+sdiGripper2Release+" = 1";
+            Stop;
+        ENDIF
+
+    ENDPROC
+
+    !***************************************************************
+    ! Routine: GripperTwoGrip
+    ! Description:
+    !   This procedure handles the gripping operation of Gripper 2.
+    !   It configures the alias I/O signals, sets the appropriate
+    !   digital outputs to activate the gripper, and—if feedback is
+    !   enabled—waits for the corresponding input confirmations.
+    !   Error handling is included to manage timeout scenarios.
+    !***************************************************************
+
+    PROC GripperTwoGrip()
+        ! Configure alias signals for the gripper
+        GRIPPER_ALIAS_IO_CONFIG;
+
+        ! Ensure the release signal is turned off
+        SetDO AliasDo_Gripper2Release,0;
+        bGripper2Release_Order:=FALSE;
+		WaitTime\InPos,0.2;
+        ! Activate the grip signal
+        SetDO AliasDo_Gripper2Grip,1;
+        bGripper2Grip_Order:=True;
+
+        ! If feedback monitoring is enabled, verify signal transitions
+        IF bIsFeedbackEnabled=TRUE THEN
+            ! Wait until the release input signal confirms deactivation (release = 0)
+            WaitUntil\inpos,AliasDi_Gripper2Release=0\MaxTime:=nMaxTimeout;
+            bGripper2Release_Event:=FALSE;
+            ! Wait until the grip input signal confirms activation (grip = 1)
+            WaitUntil\inpos,AliasDi_Gripper2Grip=1\MaxTime:=nMaxTimeout;
+            bGripper2Grip_Event:=TRUE;
+        ENDIF
+
+
+
+    ERROR
+        ! Handle timeout errors during signal confirmation
+        IF ERRNO=ERR_WAIT_MAXTIME THEN
+            ErrWrite sGripper2,sHeader
+            \RL2:=" "
+            \RL3:=sMsg1+sdiGripper2Grip+" = 1"
+            \RL4:=sMsg2+sdiGripper2Release+" = 0";
+            Stop;
+        ENDIF
+
+    ENDPROC
+
+
+ENDMODULE

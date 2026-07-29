@@ -1,0 +1,11 @@
+MODULE IOGripper_ToolData(SYSMODULE)
+    TASK PERS tooldata Match_F:=[TRUE,[[0,0,165],[1,0,0,0]],[0.8,[8.9,0,121.6],[1,0,0,0],0.011,0.014,0]];
+    !TASK PERS tooldata tlidMatch_F:=[TRUE,[[0,0,165],[1,0,0,0]],[0.8,[8.9,0,121.6],[1,0,0,0],0.011,0.014,0]];
+    
+    TASK PERS tooldata Match_V:=[TRUE,[[0,0,140],[1,0,0,0]],[0.5,[7.1,0,145.3],[1,0,0,0],0.015,0.007,0]];
+    !TASK PERS tooldata tlidMatch_V:=[TRUE,[[0,0,140],[1,0,0,0]],[0.5,[7.1,0,145.3],[1,0,0,0],0.015,0.007,0]];
+    
+    TASK PERS tooldata Match_Q:=[TRUE,[[0,0,21],[1,0,0,0]],[0.1,[0,0,10],[1,0,0,0],0,0,0]]; 
+    TASK PERS tooldata tlidMatch_Q:=[TRUE,[[0,0,21],[1,0,0,0]],[0.1,[0,0,10],[1,0,0,0],0,0,0]]; 
+    
+ENDMODULE

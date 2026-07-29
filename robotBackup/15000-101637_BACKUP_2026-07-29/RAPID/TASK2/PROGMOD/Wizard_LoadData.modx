@@ -1,0 +1,301 @@
+MODULE Wizard_LoadData
+    
+    ! FROM HMI
+    PERS num nRequestId;
+    PERS num nDemoCycle;
+    PERS bool bEnableGripper := TRUE;
+    
+    PERS bool bPickFromDist:=TRUE;
+    PERS bool bPickFromFrame;
+    PERS bool bRobotInFontain:=FALSE;
+
+    PERS num nFrameIndex:=0;
+    PERS num nFrameOffset:=50;
+
+    PERS num nHuppeLenght:=150;
+    PERS num nwaitTimeSchokoladeDrops:=3;
+    PERS num nTowelHeight:=150;
+
+    CONST speeddata vLowSpeed:=[100,100,100,100];
+    CONST speeddata vHighSpeed:=[250,250,250,250];
+    CONST speeddata vDemoSpeed:=[50,25,50,50];
+
+    PERS num nCountOfDropRotation:=3;
+
+    PERS tooldata t_Gripper:=[TRUE,[[-3.647544,-156.2835,95.15953],[1,0,0,0]],[1,[200,0,0],[1,0,0,0],0,0,0]];
+    PERS tooldata t_GripperJaws:=[TRUE,[[0,0,120],[1,0,0,0]],[1,[200,0,0],[1,0,0,0],0,0,0]];
+
+
+
+    !***********************************************************
+    !
+    ! Module:  Module1
+    !
+    ! Description:
+    !   All About Automation
+    !
+    ! Author: Toma
+    !
+    ! Version: 1.1
+    !
+    !***********************************************************
+
+    PROC main()
+
+        TPErase;
+        IF nRequestId <> 0 then
+            Home;
+        ENDIF
+!       TPReadFK nRequestId,"Choose programm","DipInSchoko","Demo","TransportPosition",stEmpty,stEmpty;
+
+        TEST nRequestId
+        CASE 1:
+            DipInSchoko;
+            nRequestId:=0;
+        CASE 2:
+            Demo;
+        CASE 3:
+            TransportPositionRoutine;
+            nRequestId:=0;
+        DEFAULT:
+        ENDTEST
+
+        WaitTime 1;
+
+    ENDPROC
+
+
+
+
+    PROC DipInSchoko()
+
+        ! Picking
+        IF bPickFromDist THEN
+            SubPickBuiscuitFromDistributor;
+        ELSEIF bPickFromFrame THEN
+            SubPickBuiscuitFromFrame;
+        ENDIF
+
+        ! Dip
+        IF bRobotInFontain THEN
+            SubDipInFontain;
+        ENDIF
+
+        ! Give To Visitor
+        SubGiveToVisitor;
+        
+        !Take handtowel 
+        SubPickHandTowel;
+        
+        ! give hand towel to visitor
+        SubGiveHandTowelToVisitor;
+        
+        !Go home after a cycle
+        Home;
+
+    ENDPROC
+
+    PROC SubPickBuiscuitFromDistributor()
+
+!        OpenGripper;
+
+        ! Approch
+        MoveJ rApprochPickBiscuit,vHighSpeed,z100,t_Gripper\WObj:=wobj0;
+
+        ! Fine Approch
+        MoveL Offs(rPickBiscuit,nHuppeLenght,0,0),vHighSpeed,z0,t_Gripper\WObj:=wobj0;
+
+        ! Final Point
+        MoveL Offs(rPickBiscuit,0,0,0),vLowSpeed,fine,t_Gripper\WObj:=wobj0;
+
+        WaitRob\inpos;
+
+!        Close_Gripper;
+
+        ! Go back
+        MoveL Offs(rPickBiscuit,0,0,30),vLowSpeed,z10,t_Gripper\WObj:=wobj0;
+        MoveL Offs(rPickBiscuit,0,0,100),vHighSpeed,z10,t_Gripper\WObj:=wobj0;
+        
+        ! Approch back
+        MoveJ Offs(rApprochPickBiscuit,-nHuppeLenght,0,50),vHighSpeed,z100,t_Gripper\WObj:=wobj0;
+
+    ENDPROC
+
+    PROC SubPickBuiscuitFromFrame()
+
+        OpenGripper;
+
+        ! Approch
+        MoveJ Offs(rPickBiscuitFrame,(nFrameIndex*nFrameOffset)-nFrameOffset,0,100),vHighSpeed,z100,t_Gripper\WObj:=wobj0;
+
+        ! Pick
+        MoveL Offs(rPickBiscuitFrame,(nFrameIndex*nFrameOffset)-nFrameOffset,0,0),vHighSpeed,fine,t_Gripper\WObj:=wobj0;
+
+        WaitRob\inpos;
+
+        Close_Gripper;
+
+        ! Go back
+        MoveL Offs(rPickBiscuitFrame,(nFrameIndex*nFrameOffset)-nFrameOffset,0,200),vHighSpeed,fine,t_Gripper\WObj:=wobj0;
+
+    ENDPROC
+
+    PROC SubDipInFontain()
+        VAR num nRotation;
+        VAR num nAngleAmplitude:=40;
+
+        ! Approch
+        MoveJ rApprochFontain,vHighSpeed,z100,t_Gripper\wobj:=wobj0;
+
+        !Dip offset start from visitor side
+        MoveJ Offs(rDipOnFontainStart,0,0,0),vHighSpeed,z0,t_Gripper\WObj:=wobj0;
+
+        ! end in stand side in the case of schokolade projection
+        MoveL Offs(rDipOnFontainEnd,0,0,0),vHighSpeed,z0,t_Gripper\WObj:=wobj0;
+
+        WaitTime nwaitTimeSchokoladeDrops;
+        MoveL Offs(rDipOnFontainEnd,-200,0,0),vHighSpeed,z50,t_Gripper\WObj:=wobj0;
+
+        ! Approch
+        MoveJ rApprochVisitor,vHighSpeed,z100,t_Gripper\wobj:=wobj0;
+
+
+    ENDPROC
+    
+    PROC WaitToVisitorHandshake()
+        ! var write by HMI 
+        WaitDO HandshakeVisitor,1;
+        SetDO HandshakeVisitor,0;
+    ENDPROC
+
+    PROC SubGiveToVisitor()
+
+        ! Approch
+        MoveJ rApprochVisitor,vHighSpeed,z100,t_Gripper\WObj:=wobj0;
+
+        !MoveL Offs(rGiveVisitor,0,-100,0),vHighSpeed,z100,t_Gripper\WObj:=wobj0;
+
+        MoveL rGiveVisitor,vLowSpeed,z0,t_Gripper\WObj:=wobj0;
+        WaitRob\InPos;
+!        Wait FOR visitor input
+
+        WaitToVisitorHandshake;
+!        Open_Gripper;
+
+        MoveL rApprochVisitor,vLowSpeed,z100,t_Gripper\WObj:=wobj0;
+
+        MoveJ rHomePos,vHighSpeed,z0,t_Gripper\wobj:=wobj0;
+
+
+
+    ENDPROC
+
+    PROC HandTowel()
+
+        !take hand towl
+        SubPickHandTowel;
+
+        ! give it to the visitor
+        SubGiveHandTowelToVisitor;
+
+        !after cycle go to home
+        Home;
+
+    ENDPROC
+
+    PROC SubPickHandTowel()
+
+        Open_Gripper;
+        
+        !Approch
+        MoveJ Offs(rPickTowelVisitor,0,0,150),vHighSpeed,z10,t_GripperJaws\WObj:=wobj0;
+
+        !Take point
+        MoveL rPickTowelVisitor,vHighSpeed,z0,t_GripperJaws\WObj:=wobj0;
+
+        WaitRob\InPos;
+        Close_Gripper;
+
+        !Take up
+        MoveL Offs(rPickTowelVisitor,0,0,nTowelHeight),vLowSpeed,z10,t_GripperJaws\WObj:=wobj0;
+
+    ENDPROC
+
+    PROC SubGiveHandTowelToVisitor()
+        VAR num nOffsetToGive:=150;
+
+        !Approch visitor
+        MoveJ Offs(rGiveTowelToVisitor,0,nOffsetToGive,0),vHighSpeed,z10,t_GripperJaws\WObj:=wobj0;
+
+        !give to visitor
+        MoveL rGiveTowelToVisitor,vLowSpeed,z0,t_GripperJaws\WObj:=wobj0;
+        WaitRob\InPos;
+
+        !Input from visitor handshake finished
+        WaitToVisitorHandshake;
+        Open_Gripper;
+        
+        MoveL Offs(rGiveTowelToVisitor,0,nOffsetToGive,0),vLowSpeed,z10,t_GripperJaws\WObj:=wobj0;
+
+    ENDPROC
+
+    PROC Demo()
+
+        MoveJ rDemo_1,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+
+        MoveJ rDemo_2,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+
+        MoveJ rDemo_3,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+
+        MoveJ rDemo_4,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+
+        MoveJ rDemo_5,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+
+        MoveJ rDemo_6,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+        
+        MoveJ rDemo_7,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+
+    ENDPROC
+
+    PROC TransportPositionRoutine()
+        MoveAbsJ rTransportPosition,vlowSpeed,fine,tool0;
+        WaitRob\InPos;
+    ENDPROC
+
+    PROC Close_Gripper()
+        IF bEnableGripper THEN
+            closeGripper;
+        ENDIF
+    ENDPROC
+
+    PROC Open_Gripper()
+        IF bEnableGripper THEN
+            openGripper;
+        ENDIF
+    ENDPROC
+
+    PROC Home()
+        MoveJ rHomePos,v1000,z50,tool0\WObj:=wobj0;
+    ENDPROC
+
+    PROC TeachPos()
+
+        MoveL rHomePos,v1000,z50,t_Gripper\WObj:=wobj0;
+
+        MoveL rApprochPickBiscuit,v1000,z50,t_Gripper\WObj:=wobj0;
+        MoveL rPickBiscuit,v1000,z50,t_Gripper\WObj:=wobj0;
+
+        MoveL rApprochFontain,v1000,z50,t_Gripper\WObj:=wobj0;
+        MoveL rDipOnFontainStart,v1000,z50,t_Gripper\WObj:=wobj0;
+        MoveL rDipOnFontainEnd,v1000,z50,t_Gripper\WObj:=wobj0;
+
+        MoveL rApprochVisitor,v1000,z50,t_Gripper\WObj:=wobj0;
+        MoveL rGiveVisitor,v1000,z50,t_Gripper\WObj:=wobj0;
+        
+        MoveL rPickTowelVisitor, v1000, z50, t_GripperJaws\WObj:=wobj0;
+        MoveL rGiveTowelToVisitor, v1000, z50, t_GripperJaws\WObj:=wobj0;
+        
+    ENDPROC
+
+
+ENDMODULE

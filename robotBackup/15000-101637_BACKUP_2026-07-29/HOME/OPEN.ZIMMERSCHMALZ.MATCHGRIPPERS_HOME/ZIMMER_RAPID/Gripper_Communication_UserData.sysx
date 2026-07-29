@@ -1,0 +1,5 @@
+MODULE Gripper_Communication_UserData(SYSMODULE)
+    TASK PERS tooldata Gripper_0:=[TRUE,[[0,0,0],[0,0,0,0]],[1.8,[0.6241,0.0022,56.4160],[1,0,0,0],0,0,0]];
+    TASK PERS tooldata Gripper_1:=[TRUE,[[0,65.4060,77.7490],[0.934775,0,0.3426105,0]],[1.8,[0.6241,0.0022,56.4160],[1,0,0,0],0,0,0]];
+    TASK PERS tooldata Gripper_2:=[TRUE,[[0,-65.4060,77.7490],[0.934775,0,-0.3426105,0]],[1.8,[0.6241,0.0022,56.4160],[1,0,0,0],0,0,0]];
+ENDMODULE
