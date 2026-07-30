@@ -4,9 +4,12 @@ MODULE Wizard_LoadData
     PERS num nRequestId;
     PERS num nDemoCycle;
     
+    ! PARAMETERS
+    PERS bool bEnableGripper := TRUE;
     PERS bool bPickFromDist:=TRUE;
     PERS bool bPickFromFrame;
     PERS bool bRobotInFontain:=FALSE;
+    PERS bool bTakeBiscuitWithJaws := FALSE;
 
     PERS num nFrameIndex:=0;
     PERS num nFrameOffset:=50;
@@ -17,7 +20,7 @@ MODULE Wizard_LoadData
 
     CONST speeddata vLowSpeed:=[100,100,100,100];
     CONST speeddata vHighSpeed:=[250,250,250,250];
-    CONST speeddata vDemoSpeed:=[50,25,50,50];
+    CONST speeddata vDemoSpeed:=[30,25,50,50];
 
     PERS num nCountOfDropRotation:=3;
 
@@ -42,9 +45,11 @@ MODULE Wizard_LoadData
     PROC main()
 
         TPErase;
-        IF nRequestId <> 0 then
+        IF nRequestId = 0 then
             Home;
         ENDIF
+        
+        
 !       TPReadFK nRequestId,"Choose programm","DipInSchoko","Demo","TransportPosition",stEmpty,stEmpty;
 
         TEST nRequestId
@@ -70,7 +75,11 @@ MODULE Wizard_LoadData
 
         ! Picking
         IF bPickFromDist THEN
-            SubPickBuiscuitFromDistributor;
+            IF bTakeBiscuitWithJaws THEN
+                SubPickBiscuitWithGripper;
+            ELSE 
+                SubPickBuiscuitFromDistributor;
+            ENDIF
         ELSEIF bPickFromFrame THEN
             SubPickBuiscuitFromFrame;
         ENDIF
@@ -81,7 +90,11 @@ MODULE Wizard_LoadData
         ENDIF
 
         ! Give To Visitor
-        SubGiveToVisitor;
+        IF bTakeBiscuitWithJaws THEN
+            SubGiveBiscuitWithGripper;
+        ELSE
+            SubGiveToVisitor;
+        ENDIF
         
         !Take handtowel 
         SubPickHandTowel;
@@ -109,7 +122,7 @@ MODULE Wizard_LoadData
 
         WaitRob\inpos;
 
-!        CloseGripper;
+!        Close_Gripper;
 
         ! Go back
         MoveL Offs(rPickBiscuit,0,0,30),vLowSpeed,z10,t_Gripper\WObj:=wobj0;
@@ -132,7 +145,7 @@ MODULE Wizard_LoadData
 
         WaitRob\inpos;
 
-        CloseGripper;
+        Close_Gripper;
 
         ! Go back
         MoveL Offs(rPickBiscuitFrame,(nFrameIndex*nFrameOffset)-nFrameOffset,0,200),vHighSpeed,fine,t_Gripper\WObj:=wobj0;
@@ -163,7 +176,7 @@ MODULE Wizard_LoadData
     
     PROC WaitToVisitorHandshake()
         ! var write by HMI 
-        WaitDO HandshakeVisitor,1;
+        WaitUntil (HandshakeVisitor = 1) OR (ABB_Scalable_IO_0_DI8 = 1);
         SetDO HandshakeVisitor,0;
     ENDPROC
 
@@ -179,8 +192,7 @@ MODULE Wizard_LoadData
 !        Wait FOR visitor input
 
         WaitToVisitorHandshake;
-
-!        OpenGripper;
+!        Open_Gripper;
 
         MoveL rApprochVisitor,vLowSpeed,z100,t_Gripper\WObj:=wobj0;
 
@@ -205,6 +217,8 @@ MODULE Wizard_LoadData
 
     PROC SubPickHandTowel()
 
+        Open_Gripper;
+        
         !Approch
         MoveJ Offs(rPickTowelVisitor,0,0,150),vHighSpeed,z10,t_GripperJaws\WObj:=wobj0;
 
@@ -231,9 +245,47 @@ MODULE Wizard_LoadData
 
         !Input from visitor handshake finished
         WaitToVisitorHandshake;
+        Open_Gripper;
         
         MoveL Offs(rGiveTowelToVisitor,0,nOffsetToGive,0),vLowSpeed,z10,t_GripperJaws\WObj:=wobj0;
 
+    ENDPROC
+    
+    PROC SubPickBiscuitWithGripper()
+        
+        Open_Gripper;
+        
+        !Approch
+        MoveJ Offs(rPickBiscuitGripper,0,-50,100),vHighSpeed,z10,t_GripperJaws \WObj:=wobj0;
+        MoveL Offs(rPickBiscuitGripper,0,-50,0),vHighSpeed,z10,t_GripperJaws \WObj:=wobj0;
+        
+        !take pos
+        MoveL rPickBiscuitGripper,vLowSpeed,fine, t_GripperJaws \WObj:=wobj0;
+        
+        WaitRob \InPos;
+        Close_Gripper;
+        
+        MoveL Offs(rPickBiscuitGripper,0,0,30),vLowSpeed,z10,t_GripperJaws \WObj:=wobj0;
+        MoveL Offs(rPickBiscuitGripper,0,-50,100),vHighSpeed,z100,t_GripperJaws \WObj:=wobj0;
+        
+    ENDPROC
+
+    PROC SubGiveBiscuitWithGripper()
+        
+        ! approch
+        MoveJ rApprochGiveBiscuitGripper,vHighSpeed,z50,t_GripperJaws \WObj:=wobj0;
+        MoveJ Offs(rGiveBiscuitGripper,0,100,0),vHighSpeed,z50,t_GripperJaws \WObj:=wobj0;
+        
+        MoveL rGiveBiscuitGripper,vLowSpeed,z0,t_GripperJaws \WObj:=wobj0;
+        
+        WaitRob \InPos;
+        
+        Open_Gripper;
+        WaitToVisitorHandshake;
+        
+        
+        Movel Offs(rGiveBiscuitGripper,0,100,0),vHighSpeed,z50,t_GripperJaws \WObj:=wobj0;
+        
     ENDPROC
 
     PROC Demo()
@@ -251,6 +303,11 @@ MODULE Wizard_LoadData
         MoveJ rDemo_6,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
         
         MoveJ rDemo_7,vDemoSpeed,z50,t_Gripper\WObj:=wobj0;
+        
+        IF StopDemo = 1 THEN
+            SetDO StopDemo, 0;
+            nRequestId := 0;
+        ENDIF
 
     ENDPROC
 
@@ -260,21 +317,19 @@ MODULE Wizard_LoadData
     ENDPROC
 
     PROC Close_Gripper()
-        TPWrite "Closing gripper...";
-        WaitTime 1;
-        !        SetDO BiscuitsTaked,1;
-        TPWrite "Gripper closed...";
+        IF bEnableGripper THEN
+            closeGripper;
+        ENDIF
     ENDPROC
 
     PROC Open_Gripper()
-        TPWrite "Openning gripper...";
-        WaitTime 1;
-        !        SetDO BiscuitsTaked,0;
-        TPWrite "Gripper openned";
+        IF bEnableGripper THEN
+            openGripper;
+        ENDIF
     ENDPROC
 
     PROC Home()
-        MoveJ rHomePos,v1000,z50,tool0\WObj:=wobj0;
+        MoveJ rHomePos,v100,z10,tool0\WObj:=wobj0;
     ENDPROC
 
     PROC TeachPos()
@@ -293,6 +348,9 @@ MODULE Wizard_LoadData
         
         MoveL rPickTowelVisitor, v1000, z50, t_GripperJaws\WObj:=wobj0;
         MoveL rGiveTowelToVisitor, v1000, z50, t_GripperJaws\WObj:=wobj0;
+        
+        MoveL rPickBiscuitGripper, v1000, z50, t_GripperJaws\WObj:=wobj0;
+        MoveL rGiveBiscuitGripper, v1000, z50, t_GripperJaws\WObj:=wobj0;
         
     ENDPROC
 

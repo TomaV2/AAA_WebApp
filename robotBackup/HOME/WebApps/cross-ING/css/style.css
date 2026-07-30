@@ -21,6 +21,28 @@ body{
     margin:60px auto;
 }
 
+.SwitchClass{
+   text-align:left;
+   font-weight:bold;
+}
+
+.SwitchClass td{
+    padding:20px;
+}
+
+.panel{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width:400px;
+    height:500px;
+    margin:0 auto;
+    border-radius:12px;
+    background:#ECECEC;
+    color:#333  ;
+}
+
 .logo{
     width:700px;
     margin-bottom:30px;

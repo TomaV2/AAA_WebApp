@@ -21,10 +21,10 @@
         <target />
       </Key_3>
       <Key_4 friendlyName="">
-        <type>None</type>
-        <allowInAuto>No</allowInAuto>
-        <pressed />
-        <target />
+        <type>Output</type>
+        <allowInAuto>Yes</allowInAuto>
+        <pressed>Setto1</pressed>
+        <target>StopDemo</target>
       </Key_4>
     </ProgrammableKeys>
     <BackgroundImage>

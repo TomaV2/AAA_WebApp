@@ -18,7 +18,7 @@ MODULE Wizard_LoadData
 
     CONST speeddata vLowSpeed:=[100,100,100,100];
     CONST speeddata vHighSpeed:=[250,250,250,250];
-    CONST speeddata vDemoSpeed:=[50,25,50,50];
+    CONST speeddata vDemoSpeed:=[30,25,50,50];
 
     PERS num nCountOfDropRotation:=3;
 
@@ -43,9 +43,10 @@ MODULE Wizard_LoadData
     PROC main()
 
         TPErase;
-        IF nRequestId <> 0 then
+        IF nRequestId = 0 then
             Home;
         ENDIF
+        
 !       TPReadFK nRequestId,"Choose programm","DipInSchoko","Demo","TransportPosition",stEmpty,stEmpty;
 
         TEST nRequestId

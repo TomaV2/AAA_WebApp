@@ -19,7 +19,7 @@ function createAllButtons() {
     try {
         dipChocoButton = new FPComponents.Button_A();
         dipChocoButton.attachToId('btnDipChoco');
-        dipChocoButton.text = 'Dip Choco';
+        dipChocoButton.text = 'Give me a waffle !';
         dipChocoButton.onclick = async function() {
             await SetAction(1);
             console.log("Dip Choco button clicked");
@@ -43,18 +43,7 @@ function createAllButtons() {
         {console.error("Error creating demoButton:", e);
         }
     
-    try {
-        transportPositionButton = new FPComponents.Button_A();
-        transportPositionButton.attachToId('btnTransportPosition');
-        transportPositionButton.text = 'Transport Position';
-        transportPositionButton.onclick = async function() {
-            await SetAction(3);
-            console.log("transportPositionButton button clicked");
-            };
-        }
-        catch(e) 
-        {console.error("Error creating transportPositionButton:", e);
-        }
+    
 }
 
 async function SetRobotParameter(paramName, paramValue){
