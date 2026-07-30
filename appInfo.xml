@@ -2,6 +2,6 @@
 
 <WebApp>
     <name>Cross-ING</name>
-    <icon>icons/ING.png</icon>
+    <icon>img/ING.png</icon>
     <path>index.html</path>
 </WebApp>
