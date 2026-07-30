@@ -9,14 +9,14 @@ MODULE Wizard_LoadData
     PERS bool bPickFromDist:=TRUE;
     PERS bool bPickFromFrame;
     PERS bool bRobotInFontain:=FALSE;
-    PERS bool bTakeBiscuitWithJaws := FALSE;
+    PERS bool bTakeBiscuitWithJaws := TRUE;
 
     PERS num nFrameIndex:=0;
     PERS num nFrameOffset:=50;
 
     PERS num nHuppeLenght:=150;
     PERS num nwaitTimeSchokoladeDrops:=3;
-    PERS num nTowelHeight:=150;
+    PERS num nTowelHeight:=250;
 
     CONST speeddata vLowSpeed:=[100,100,100,100];
     CONST speeddata vHighSpeed:=[250,250,250,250];
@@ -61,6 +61,7 @@ MODULE Wizard_LoadData
         CASE 3:
             TransportPositionRoutine;
             nRequestId:=0;
+            Stop;
         DEFAULT:
         ENDTEST
 
@@ -244,8 +245,9 @@ MODULE Wizard_LoadData
         WaitRob\InPos;
 
         !Input from visitor handshake finished
-        WaitToVisitorHandshake;
         Open_Gripper;
+        WaitToVisitorHandshake;
+        
         
         MoveL Offs(rGiveTowelToVisitor,0,nOffsetToGive,0),vLowSpeed,z10,t_GripperJaws\WObj:=wobj0;
 
@@ -266,7 +268,7 @@ MODULE Wizard_LoadData
         Close_Gripper;
         
         MoveL Offs(rPickBiscuitGripper,0,0,30),vLowSpeed,z10,t_GripperJaws \WObj:=wobj0;
-        MoveL Offs(rPickBiscuitGripper,0,-50,100),vHighSpeed,z100,t_GripperJaws \WObj:=wobj0;
+        MoveJ Offs(rPickBiscuitGripper,0,-50,100),vHighSpeed,z100,t_GripperJaws \WObj:=wobj0;
         
     ENDPROC
 
@@ -285,6 +287,7 @@ MODULE Wizard_LoadData
         
         
         Movel Offs(rGiveBiscuitGripper,0,100,0),vHighSpeed,z50,t_GripperJaws \WObj:=wobj0;
+        
         
     ENDPROC
 
